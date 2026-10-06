@@ -38,45 +38,29 @@ jobs:
             tag_names:
               - 17-ubuntu-noble
 
-          # Ubuntu Jammy (22.04)
-          - base_image: ubuntu:jammy
-            package_name: openjdk-21-jre
-            platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/riscv64,linux/s390x
-            tag_names:
-              - 21-ubuntu-jammy
-          - base_image: ubuntu:jammy
-            package_name: openjdk-17-jre
-            platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/riscv64,linux/s390x
-            tag_names:
-              - 17-ubuntu-jammy
-
-          # Debian Bookworm (12)
-          - base_image: debian:bookworm
+          # Debian Trixie (13)
+          - base_image: debian:trixie
             package_name: openjdk-25-jre
-            platforms: linux/amd64,linux/arm/v5,linux/arm/v7,linux/arm64/v8,linux/386,linux/ppc64le,linux/s390x
+            platforms: linux/amd64,linux/arm/v5,linux/arm/v7,linux/arm64/v8,linux/386,linux/ppc64le,linux/riscv64,linux/s390x
             tag_names:
-              - 25-debian-bookworm
+              - 25-debian-trixie
+          - base_image: debian:trixie-slim
+            package_name: openjdk-25-jre
+            platforms: linux/amd64,linux/arm/v5,linux/arm/v7,linux/arm64/v8,linux/386,linux/ppc64le,linux/riscv64,linux/s390x
+            tag_names:
+              - 25-debian-trixie-slim
+
+          # Debian Bookworm (12): current images omit arm/v5 and s390x.
           - base_image: debian:bookworm
             package_name: openjdk-17-jre
-            platforms: linux/amd64,linux/arm/v5,linux/arm/v7,linux/arm64/v8,linux/386,linux/ppc64le,linux/s390x
+            platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/386,linux/ppc64le
             tag_names:
               - 17-debian-bookworm
           - base_image: debian:bookworm-slim
             package_name: openjdk-17-jre
-            platforms: linux/amd64,linux/arm/v5,linux/arm/v7,linux/arm64/v8,linux/386,linux/ppc64le,linux/s390x
+            platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/386,linux/ppc64le
             tag_names:
               - 17-debian-bookworm-slim
-          # Debian Bullseye (11)
-          - base_image: debian:bullseye
-            package_name: openjdk-17-jre
-            platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/386
-            tag_names:
-              - 17-debian-bullseye
-          - base_image: debian:bullseye-slim
-            package_name: openjdk-17-jre
-            platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/386
-            tag_names:
-              - 17-debian-bullseye-slim
       fail-fast: false
     steps:
       # https://github.com/marketplace/actions/checkout
@@ -109,6 +93,11 @@ jobs:
             org.opencontainers.image.vendor=retrodaredevil
             org.opencontainers.image.url=https://github.com/retrodaredevil/docker-lavender-jre
             org.opencontainers.image.authors=retrodaredevil
+      # QEMU must be configured before Buildx for non-native platforms.
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: all
       # https://github.com/marketplace/actions/docker-setup-buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
