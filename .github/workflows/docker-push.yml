@@ -23,6 +23,11 @@ jobs:
         data:
           # Ubuntu Noble (24.04)
           - base_image: ubuntu:noble
+            package_name: openjdk-25-jre
+            platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/riscv64,linux/s390x
+            tag_names:
+              - 25-ubuntu-noble
+          - base_image: ubuntu:noble
             package_name: openjdk-21-jre
             platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/riscv64,linux/s390x
             tag_names:
@@ -46,6 +51,11 @@ jobs:
               - 17-ubuntu-jammy
 
           # Debian Bookworm (12)
+          - base_image: debian:bookworm
+            package_name: openjdk-25-jre
+            platforms: linux/amd64,linux/arm/v5,linux/arm/v7,linux/arm64/v8,linux/386,linux/ppc64le,linux/s390x
+            tag_names:
+              - 25-debian-bookworm
           - base_image: debian:bookworm
             package_name: openjdk-17-jre
             platforms: linux/amd64,linux/arm/v5,linux/arm/v7,linux/arm64/v8,linux/386,linux/ppc64le,linux/s390x
